@@ -21,7 +21,7 @@ enum Oper {
 
 #ifdef SERIAL
 
-time_s Operation(arr_t* arr_inp1, arr_t* arr_inp2, arr_t* arr_out, const uint32_t size, const enum Oper operation);
+time_s Operation(arr_t** arr_inp1, arr_t** arr_inp2, arr_t** arr_out, const uint32_t size, const enum Oper operation);
 
 time_s Sum(arr_t* arr_inp1, arr_t* arr_inp2, arr_t* arr_out, const uint32_t size);
 time_s Sub(arr_t* arr_inp1, arr_t* arr_inp2, arr_t* arr_out, const uint32_t size);

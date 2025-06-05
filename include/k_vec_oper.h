@@ -15,7 +15,8 @@
 
 
 
-//extern "C" time_s Operation(uint8_t *arr_inp1, uint8_t *arr_inp2, uint8_t *arr_out, const uint32_t size, const enum Oper operation);
+void Flat(arr_t** matrix, arr_t* array, const uint32_t size);
+void Deflat(arr_t* array, arr_t** matrix, const uint32_t size);
 
 __global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);
 __global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);

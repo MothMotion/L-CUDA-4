@@ -2,6 +2,7 @@
 #include "random.h"
 #include "timer.h"
 #include "vec_oper.h"
+#include "matrix.h"
 
 #ifndef SERIAL
 #include "k_vec_wrap.h"
@@ -18,9 +19,13 @@ int main() {
   uint32_t arr_size = ARRAY_SIZE,
            cycles   = CYCLES;
 
-  arr_t *arr1 = malloc(arr_size * sizeof(arr_t)),
-        *arr2 = malloc(arr_size * sizeof(arr_t)),
-        *out  = malloc(arr_size * sizeof(arr_t));
+  arr_t **arr1 = malloc(arr_size * sizeof(arr_t*)),
+        **arr2 = malloc(arr_size * sizeof(arr_t*)),
+        **out  = malloc(arr_size * sizeof(arr_t*));
+
+  Init(arr1, arr_size);
+  Init(arr2, arr_size);
+  Init(out, arr_size);
 
   float avg_rand = 0;
 
@@ -67,10 +72,14 @@ int main() {
     PRINTTIME(avg_time[i], "Total:\t%f\n\n");
 
     #else
-    PRINTTIME(avg_time[i], "Total:\t%f\n", "\tCopying:\t%f\n", "\tRunning:\t%f\n", "\tReturning:\t%f\n\n");
+    PRINTTIME(avg_time[i], "Total:\t%f\n", "Flatting:\t%f\n", "\tCopying:\t%f\n", "\tRunning:\t%f\n", "\tReturning:\t%f\n\n");
 
     #endif
   }
+
+  Deinit(arr1, arr_size);
+  Deinit(arr2, arr_size);
+  Deinit(out, arr_size);
 
   return 0;
 }

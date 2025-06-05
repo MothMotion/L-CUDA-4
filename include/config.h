@@ -10,8 +10,9 @@
 
 #define ARRAY_SIZE (uint32_t)atoi(getenv("ARRAY_SIZE"))
 #define CYCLES (uint32_t)atoi(getenv("CYCLES"))
-#define KBLOCKS (uint32_t)atoi(getenv("KBLOCKS"))
+#define _KBLOCKS (uint32_t)atoi(getenv("KBLOCKS"))
 #define KTHREADS (uint32_t)atoi(getenv("KTHREADS"))
+#define KBLOCKS ( (_KBLOCKS) ? (_KBLOCKS) : ( (ARRAY_SIZE%KTHREADS) ? (ARRAY_SIZE/KTHREADS + 1) : (ARRAY_SIZE/KTHREADS) ) )
 
 //#define SERIAL
 

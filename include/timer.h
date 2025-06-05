@@ -2,6 +2,10 @@
 #ifndef TIMER
 #define TIMER
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 
 #include "config.h"
@@ -40,13 +44,15 @@ struct _time_s {
 #else
 struct _time_s {
   float total;
+  float flat;
   float memcpy;
   float run;
   float memret;
 };
 
-#define PRINTTIME(time, text_tot, text_mec, text_run, text_mer) {\
+#define PRINTTIME(time, text_tot, text_flt, text_mec, text_run, text_mer) {\
   printf(text_tot, time.total);\
+  printf(text_flt, time.flat);\
   printf(text_mec, time.memcpy);\
   printf(text_run, time.run);\
   printf(text_mer, time.memret);\
@@ -54,6 +60,7 @@ struct _time_s {
 
 #define EMPTYTIME(time) {\
   time.total = 0;\
+  time.flat = 0;\
   time.memcpy = 0;\
   time.run = 0;\
   time.memret = 0;\
@@ -67,5 +74,9 @@ void time_add(time_s* to, const time_s* fr);
 void time_sub(time_s* to, const time_s* fr);
 void time_mul(time_s* to, const float fr);
 void time_div(time_s* to, const float fr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

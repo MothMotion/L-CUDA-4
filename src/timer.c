@@ -1,6 +1,9 @@
 #include "config.h"
 #include "timer.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 void time_add(time_s* to, const time_s* fr) {
@@ -54,3 +57,7 @@ void time_div(time_s* to, const float fr) {
 
   #endif
 }
+
+#ifdef __cplusplus
+}
+#endif

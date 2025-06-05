@@ -12,6 +12,6 @@
 #define MIN(min, value) \
   ( (min < value) ? (min) : (value) )
 
-void Randomize(arr_t* arr, const uint32_t size, const arr_t min_v, const arr_t max_v);
+void Randomize(arr_t** mat, const uint32_t size, const arr_t min_v, const arr_t max_v);
 
 #endif // !RANDOM_H

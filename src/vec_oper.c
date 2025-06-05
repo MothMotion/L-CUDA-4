@@ -10,7 +10,7 @@
 
 
 
-time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, const enum Oper op) {
+time_s Operation(arr_t** arr1, arr_t** arr2, arr_t** out, const uint32_t size, const enum Oper op) {
   time_s (*func)(arr_t*, arr_t*, arr_t*, const uint32_t) = NULL;
   switch(op) {
     case opadd : func = Sum; break;
@@ -18,7 +18,13 @@ time_s Operation(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size, cons
     case opmul : func = Mul; break;
     case opdiv : func = Div; break;
   }
-  return func(arr1, arr2, out, size);
+
+  time_s result, temp;
+  for(uint32_t i=0; i<size; ++i) {
+    temp = func(arr1[i], arr2[i], out[i], size);
+    time_add(&result, &temp);
+  }
+  return result;
 }
 
 time_s Sum(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size) {
