@@ -1,9 +1,6 @@
 #include "config.h"
 #include "timer.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 void time_add(time_s* to, const time_s* fr) {
@@ -12,6 +9,7 @@ void time_add(time_s* to, const time_s* fr) {
 
   #else
   to->total += fr->total;
+  to->flat += fr->flat;
   to->memcpy += fr->memcpy;
   to->run += fr->run;
   to->memret += fr->memret;
@@ -25,6 +23,7 @@ void time_sub(time_s* to, const time_s* fr) {
 
   #else
   to->total -= fr->total;
+  to->flat -= fr->flat;
   to->memcpy -= fr->memcpy;
   to->run -= fr->run;
   to->memret -= fr->memret;
@@ -38,6 +37,7 @@ void time_mul(time_s* to, const float fr) {
 
   #else
   to->total *= fr;
+  to->flat *= fr;
   to->memcpy *= fr;
   to->run *= fr;
   to->memret *= fr;
@@ -51,13 +51,10 @@ void time_div(time_s* to, const float fr) {
 
   #else
   to->total /= fr;
+  to->flat /= fr;
   to->memcpy /= fr;
   to->run /= fr;
   to->memret /= fr;
 
   #endif
 }
-
-#ifdef __cplusplus
-}
-#endif

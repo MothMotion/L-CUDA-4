@@ -58,15 +58,15 @@ extern "C" time_s Operation(arr_t** arr1, arr_t** arr2, arr_t** out, const uint3
     Deflat(h_out, out, size);
   }), time.total);
   time.flat += time.total;
-  time.flat *= 1000;
+  time.memcpy /= 1000;
+  time.run /= 1000;
+  time.memret /= 1000;
 
   time.total = time.flat + time.memcpy + time.run + time.memret;
 
   cudaFree(d_arr1);
   cudaFree(d_arr2);
   cudaFree(d_out);
-
-  time_div(&time, 1000);
 
   return time;
 }

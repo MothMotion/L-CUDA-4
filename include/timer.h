@@ -2,10 +2,6 @@
 #ifndef TIMER
 #define TIMER
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 
 #include "config.h"
@@ -74,9 +70,5 @@ void time_add(time_s* to, const time_s* fr);
 void time_sub(time_s* to, const time_s* fr);
 void time_mul(time_s* to, const float fr);
 void time_div(time_s* to, const float fr);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
