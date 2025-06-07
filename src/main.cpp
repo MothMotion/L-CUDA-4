@@ -45,13 +45,13 @@ int main() {
       Randomize(mat1, MIN_RAND, MAX_RAND);
       Randomize(mat2, MIN_RAND, MAX_RAND);
     }), time_temp.total);
-    avg_rand += time_temp.total/cycles;
+    avg_rand += time_temp.total/cycles * 1000;
 
     for(uint8_t i=Oper::opadd; i<Oper::size; ++i) 
       avg_time[i] += Operation(mat1, mat2, out, (Oper)i) / cycles;
   }
 
-  printf("Average time spent per cycle.\nRandomizing:\t%f\n", avg_rand);
+  printf("Average time spent per cycle.\nRandomizing:\t%fms\n", avg_rand);
   for(uint8_t i=Oper::opadd; i<Oper::size; ++i) {
     char* text;
     switch(i) {
@@ -67,11 +67,11 @@ int main() {
     avg_time[i].print("Total:\t");
 
     #else
-    avg_time[i].print("Total:\t", "\n\tCopying:\t", "\n\tRunning:\t", "\n\tReturning:\t");
+    avg_time[i].print("Total:\t", "ms\n\tCopying:\t", "ms\n\tRunning:\t", "ms\n\tReturning:\t");
 
     #endif
+    printf("ms\n");
   }
-  printf("\n");
 
   mat1.deinit();
   mat2.deinit();

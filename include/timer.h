@@ -21,6 +21,7 @@
   cudaEventRecord(start);\
   code_block;\
   cudaEventRecord(end);\
+  cudaEventSynchronize(end);\
   cudaEventElapsedTime(&time_var, start, end);
 
 struct time_s {

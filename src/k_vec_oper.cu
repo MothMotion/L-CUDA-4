@@ -29,7 +29,7 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
 
   arr_t* h_arr1 = arr1.flat();
   arr_t* h_arr2 = arr2.flat();
-  arr_t* temp_out;
+  arr_t* flat_out = (arr_t*)malloc(out.size*out.size*sizeof(arr_t));
 
 
   CUDATIME(({
@@ -54,8 +54,8 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
   }), time.run, start, end);
 
   CUDATIME(({
-    cudaMemcpy(temp_out, d_out, size, cudaMemcpyDeviceToHost);
-    out.deflat(temp_out);
+    cudaMemcpy(flat_out, d_out, size, cudaMemcpyDeviceToHost);
+    out.deflat(flat_out);
   }), time.memret, start, end); 
 
   time.total = time.memcpy + time.run + time.memret;
