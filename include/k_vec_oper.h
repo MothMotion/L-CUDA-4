@@ -15,12 +15,9 @@
 
 
 
-void Flat(arr_t** matrix, arr_t* array, const uint32_t size);
-void Deflat(arr_t* array, arr_t** matrix, const uint32_t size);
-
-__global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);
-__global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);
-__global__ void KMul(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);
-__global__ void KDiv(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t size);
+__global__ void KAdd(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size);
+__global__ void KSub(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size);
+__global__ void KMul(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size);
+__global__ void KDiv(arr_t* arr1, arr_t* arr2, arr_t* out, const uint32_t& size);
 
 #endif

@@ -8,9 +8,18 @@
 
 
 
-void Init(arr_t** mat, const uint32_t size);
-void Deinit(arr_t** mat, const uint32_t size);
+struct matrix {
+  arr_t** data = nullptr;
+  uint32_t size = 0;
 
+  // data must be nullptr
+  void init();
+  void deinit();
 
+  // dangerous, free after use
+  arr_t* flat() const;
+  // caution, frees 'from'
+  void deflat(arr_t* from);
+};
 
 #endif // !MATRIX_H

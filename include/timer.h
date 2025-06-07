@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TIMER
-#define TIMER
+#ifndef TIMER_H
+#define TIMER_H
 
 
 
@@ -21,54 +21,32 @@
   cudaEventRecord(start);\
   code_block;\
   cudaEventRecord(end);\
-  cudaEventSynchronize(end);\
   cudaEventElapsedTime(&time_var, start, end);
 
-#ifdef SERIAL
-struct _time_s {
-  float total;
+struct time_s {
+  float total   = 0;
+
+  #ifndef SERIAL
+  float memcpy  = 0;
+  float run     = 0;
+  float memret  = 0;
+  #endif
+
+  void print(const char* t_tot
+    #ifndef SERIAL
+             , const char* t_cpy,
+             const char* t_run,
+             const char* t_ret
+    #endif
+  );
+
+  time_s& operator+=(const time_s& t);
+  time_s& operator-=(const time_s& t);
+  time_s& operator*=(const float& f);
+  time_s& operator/=(const float& f);
+  time_s operator*(const float& f);
+  time_s operator/(const float& f);
 };
 
-#define PRINTTIME(time, text_tot) {\
-  printf(text_tot, time.total);\
-}
 
-#define EMPTYTIME(time) {\
-  time.total = 0;\
-}
- 
-#else
-struct _time_s {
-  float total;
-  float flat;
-  float memcpy;
-  float run;
-  float memret;
-};
-
-#define PRINTTIME(time, text_tot, text_flt, text_mec, text_run, text_mer) {\
-  printf(text_tot, time.total);\
-  printf(text_flt, time.flat);\
-  printf(text_mec, time.memcpy);\
-  printf(text_run, time.run);\
-  printf(text_mer, time.memret);\
-}
-
-#define EMPTYTIME(time) {\
-  time.total = 0;\
-  time.flat = 0;\
-  time.memcpy = 0;\
-  time.run = 0;\
-  time.memret = 0;\
-}
-
-#endif
-
-#define time_s struct _time_s
-
-void time_add(time_s* to, const time_s* fr);
-void time_sub(time_s* to, const time_s* fr);
-void time_mul(time_s* to, const float fr);
-void time_div(time_s* to, const float fr);
-
-#endif
+#endif // !TIMER_H

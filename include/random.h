@@ -3,15 +3,12 @@
 #define RANDOM_H
 
 #include "config.h"
+#include "matrix.h"
 
 #include <stdint.h>
 
-#define MAX(max, value) \
-  ( (max > value) ? (max) : (value) )
 
-#define MIN(min, value) \
-  ( (min < value) ? (min) : (value) )
 
-void Randomize(arr_t** mat, const uint32_t size, const arr_t min_v, const arr_t max_v);
+void Randomize(const matrix& mat, const arr_t& min_v, const arr_t& max_v);
 
 #endif // !RANDOM_H
