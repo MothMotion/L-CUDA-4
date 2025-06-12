@@ -14,10 +14,18 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 
+#include <stdio.h>
+
+#define ERRPRINT(text) \
+err = cudaGetLastError();\
+if(err != cudaSuccess)\
+  printf("%s: %s\n", text, cudaGetErrorString(err));
+
 
 
 time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper& op) {
   time_s time;
+  cudaError_t err;
   cudaEvent_t start, end;
   cudaEventCreate(&start);
   cudaEventCreate(&end);
@@ -31,8 +39,9 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
 
   float *h_arr1, *h_arr2, *flat_out;
   cudaStream_t stream;
-  cudaStreamCreate(&stream); 
+  cudaStreamCreate(&stream);
 
+  ERRPRINT("Malloc");
 
   CUDATIME(({
     h_arr1 = arr1.flat();
@@ -52,6 +61,8 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
     free(h_arr2);
   }), time.memcpy, start, end);
 
+  ERRPRINT("Memcpy");
+
   dim3 blocks(KBLOCKS, 1, 1);
   dim3 threads(KTHREADS, 1, 1);
 
@@ -69,6 +80,8 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
       func<<<blocks, threads>>>(d_arr1, d_arr2, d_out, *d_size * *d_size);
   }), time.run, start, end);
 
+  ERRPRINT("Running");
+
   CUDATIME(({
     cudaHostRegister(flat_out, out.size*out.size*sizeof(arr_t), cudaHostRegisterDefault);
 
@@ -77,6 +90,8 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
     cudaHostUnregister(flat_out);
     out.deflat(flat_out);
   }), time.memret, start, end);
+
+  ERRPRINT("Return");
 
   time.total = time.memcpy + time.run + time.memret;
 
@@ -87,6 +102,8 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
   cudaFree(d_arr2);
   cudaFree(d_out);
   cudaFree(d_size);
+
+  ERRPRINT("Free");
 
   return time;
 }
