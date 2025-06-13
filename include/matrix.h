@@ -17,7 +17,7 @@ struct matrix {
   void deinit();
 
   // dangerous, free after use
-  arr_t* flat() const;
+  void flat(arr_t* to) const;
   // caution, frees 'from'
   void deflat(arr_t* from);
 };

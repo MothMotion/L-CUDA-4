@@ -37,29 +37,28 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
   cudaMalloc((void**)&d_out, out.size*out.size*sizeof(arr_t));
   cudaMalloc((void**)&d_size, sizeof(uint32_t));
 
-  float *h_arr1, *h_arr2, *flat_out;
+  float *h_arr1 = (arr_t*)malloc(arr1.size*arr1.size*sizeof(arr_t)),
+        *h_arr2 = (arr_t*)malloc(arr2.size*arr2.size*sizeof(arr_t)),
+        *flat_out = (arr_t*)malloc(out.size*out.size*sizeof(arr_t));
   cudaStream_t stream;
   cudaStreamCreate(&stream);
 
   ERRPRINT("Malloc");
 
+  cudaHostRegister(h_arr1, arr1.size*arr1.size*sizeof(arr_t), cudaHostRegisterDefault);
+  cudaHostRegister(h_arr2, arr2.size*arr2.size*sizeof(arr_t), cudaHostRegisterDefault);
   CUDATIME(({
-    h_arr1 = arr1.flat();
-    h_arr2 = arr2.flat();
-    flat_out = (arr_t*)malloc(out.size*out.size*sizeof(arr_t));
-
-    cudaHostRegister(h_arr1, arr1.size*arr1.size, cudaHostRegisterDefault);
-    cudaHostRegister(h_arr2, arr2.size*arr2.size, cudaHostRegisterDefault); 
+    arr1.flat(h_arr1);
+    arr2.flat(h_arr2);
 
     cudaMemcpyAsync(d_arr1, h_arr1, arr1.size*arr1.size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
     cudaMemcpyAsync(d_arr2, h_arr2, arr2.size*arr2.size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
-    cudaMemcpy(d_size, &out.size, sizeof(uint32_t), cudaMemcpyHostToDevice);
-
-    cudaHostUnregister(h_arr1);
-    cudaHostUnregister(h_arr2);
-    free(h_arr1);
-    free(h_arr2);
+    cudaMemcpy(d_size, &out.size, sizeof(uint32_t), cudaMemcpyHostToDevice); 
   }), time.memcpy, start, end);
+  cudaHostUnregister(h_arr1);
+  cudaHostUnregister(h_arr2);
+  free(h_arr1);
+  free(h_arr2);
 
   ERRPRINT("Memcpy");
 

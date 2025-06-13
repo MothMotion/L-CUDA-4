@@ -3,21 +3,18 @@
 
 #include "stdint.h"
 #include "stdlib.h"
+#include <cstring>
 
 
 
-arr_t* matrix::flat() const {
-  float* temp = (float*)malloc(size*size * sizeof(arr_t));
+void matrix::flat(arr_t* to) const { 
   for(uint32_t i=0; i<size; ++i)
-    for(uint32_t j=0; j<size; ++j)
-      temp[i*size + j] = data[i][j];
-  return temp;
+    memcpy(&to[i*size], data[i], sizeof(arr_t));
 }
 
 void matrix::deflat(arr_t* from) {
   for(uint32_t i=0; i<size; ++i)
-    for(uint32_t j=0; j<size; ++j)
-      data[i][j] = from[i*size + j];
+    memcpy(data[i], &from[i*size], sizeof(arr_t));
   free(from);
 }
 
