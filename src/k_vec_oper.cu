@@ -30,6 +30,9 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
   cudaEventCreate(&start);
   cudaEventCreate(&end);
 
+  // cuz cuda is too stupid to do calculations outside device functions
+  uint32_t h_size = out.size * out.size;
+
   arr_t *d_arr1, *d_arr2, *d_out;
   uint32_t *d_size;
   cudaMalloc((void**)&d_arr1, arr1.size*arr1.size*sizeof(arr_t));
@@ -53,7 +56,7 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
 
     cudaMemcpyAsync(d_arr1, h_arr1, arr1.size*arr1.size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
     cudaMemcpyAsync(d_arr2, h_arr2, arr2.size*arr2.size*sizeof(arr_t), cudaMemcpyHostToDevice, stream);
-    cudaMemcpy(d_size, &out.size, sizeof(uint32_t), cudaMemcpyHostToDevice); 
+    cudaMemcpy(d_size, &h_size, sizeof(uint32_t), cudaMemcpyHostToDevice); 
   }), time.memcpy, start, end);
   cudaHostUnregister(h_arr1);
   cudaHostUnregister(h_arr2);
@@ -76,7 +79,7 @@ time_s Operation(const matrix& arr1, const matrix& arr2, matrix& out, const Oper
       default : break;
     }
     if(func)
-      func<<<blocks, threads>>>(d_arr1, d_arr2, d_out, *d_size * *d_size);
+      func<<<blocks, threads>>>(d_arr1, d_arr2, d_out, *d_size);
   }), time.run, start, end);
 
   ERRPRINT("Running");
